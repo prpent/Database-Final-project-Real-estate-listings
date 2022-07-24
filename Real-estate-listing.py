@@ -126,7 +126,7 @@ def search_module(search_query_str):
 def add_listing_form():
     
  
-    with st.form(key='add_form'):
+   with st.form(key='add_form'):
         Listing_type= st.selectbox("Listing Type*", listing_types )
         Listing_Status = st.radio( "Select Listing status" , listing_statuses_insert  )
         Listing_Price = st.number_input('Price')
@@ -166,6 +166,7 @@ def add_listing_form():
         else:
             
             st.success(proc_msg[0][0])
+        
         
 
 def update_delete_module(update_by_listing_id):
