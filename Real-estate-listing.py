@@ -279,7 +279,16 @@ def update_delete_module(update_by_listing_id):
                 resultset3 = run_query( "select state,city,zip_code from city" )
                 clean_db = pd.DataFrame( resultset3 , columns=["State_name" , "City_name" , "Zip_code"] )
                 st.dataframe( clean_db )
-
+                
+  with st.expander( "View Updated Data" ) :
+                        resultset = resultset = run_query('select listing.listing_id,listing_status.status_name,listing.Price, city.city,city.state,city.zip_code,property_type.Property_type_name,feature.bed,feature.bath,listing.acre_lot,listing.house_size,listing.full_address,listing.street from listing inner join listing_status on listing_status.ID=listing.status_id inner join city on city.id=listing.city_id inner  join property_type on property_type.ID=listing.property_type_id inner join feature on feature.id=listing.feature_id where listing_id ="{}"'.format(update_by_listing_id ) )
+                        clean_db1 = pd.DataFrame( resultset ,
+                                                  columns=["Listing_ID" , "Listing_Status" , "Listing_Price" ,
+                                                           "Listing_city" , "Listing_state" , "Listing_zipcode" ,
+                                                           "Listing_type" , "listing_bed" , "Listing_bath" ,
+                                                           "Listing_Acrelot" , "Listing_house_size" ,
+                                                           "Listing_full_address" , "Listing_street"] )
+                        st.dataframe( clean_db1 )
 
 def delete_module(delete_by_listing_id):  
     if st.button( "Delete" ) :
