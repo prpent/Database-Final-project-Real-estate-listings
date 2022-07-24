@@ -192,7 +192,7 @@ def update_delete_module(update_by_listing_id):
         if st.button( "Update Task" ) :
             cur.execute( 'update listing set price ="{}", Update_date=now() WHERE listing_id ="{}"'.format(Listing_newPrice ,update_by_listing_id ) )
             st.success( "Record is updated" )
-    elif choice == "Delete Listing":
+    elif option == "Delete Listing":
         if st.session_state.loggedIn:
             st.subheader("Delete Listing")        
             delete_module()
