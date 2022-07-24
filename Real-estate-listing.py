@@ -202,7 +202,7 @@ def update_delete_module(update_by_listing_id):
 def delete_module(delete_by_listing_id):  
     if st.button( "Delete" ) :
         cur.execute('delete from listing where listing_id ="{}"'.format(delete_by_listing_id) )
-        run_query('commit')
+        cur.execute('commit')
         st.warning( "Deleted: '{}'".format( delete_by_listing_id ) )
 
 
