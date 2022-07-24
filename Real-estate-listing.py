@@ -262,9 +262,7 @@ def update_delete_module(update_by_listing_id):
                         Listing_Street , Listing_uCity , Listing_State ,
                         Listing_uZipcode , update_by_listing_id ) )
                 db_conn.commit()
-                run_query(
-                    'update listing l inner join city c on l.city_id=c.id set l.full_address=(select concat(lower(l.street) ,",",lower(c.city),",",lower(c.state),",",c.zip_code)) where l.listing_id="{}"'.format(
-                        update_by_listing_id ) )
+                run_query('update listing l inner join city c on l.city_id=c.id set l.full_address=(select concat(lower(l.street) ,",",lower(c.city),",",lower(c.state),",",c.zip_code)) where l.listing_id="{}"'.format(update_by_listing_id ) )
                 st.success( "Record is updated" )
                 db_conn.commit()
         else:
@@ -274,27 +272,6 @@ def update_delete_module(update_by_listing_id):
                 clean_db = pd.DataFrame( resultset3 , columns=["State_name" , "City_name" , "Zip_code"] )
                 st.dataframe( clean_db )
 
-    elif option == 'Delete Listing' :
-        listing_id = run_query( "select listing_id,status_id,Price,acre_lot,house_size from listing" )
-        run_query('SET FOREIGN_KEY_CHECKS=0')
-        unique_list = [i[0] for i in listing_id]
-        if st.button( "Delete" ) :
-            run_query( 'delete from listing where listing_id ="{}"'.format( update_by_listing_id ) )
-            run_query( 'commit' )
-            st.warning( "Deleted: '{}'".format( update_by_listing_id ) )
-
-
-    with st.expander( "View Updated Data" ) :
-        resultset = run_query(
-                    'select listing.listing_id,listing_status.status_name,listing.Price, city.city,city.state,city.zip_code,property_type.Property_type_name,feature.bed,feature.bath,listing.acre_lot,listing.house_size,listing.full_address,listing.street from listing inner join listing_status on listing_status.ID=listing.status_id inner join city on city.id=listing.city_id inner  join property_type on property_type.ID=listing.property_type_id inner join feature on feature.id=listing.listing_id where listing_id ="{}"'.format(
-                        update_by_listing_id ) )
-        clean_db1 = pd.DataFrame( resultset ,
-                                     columns=["Listing_ID" , "Listing_Status" , "Listing_Price" ,
-                                              "Listing_city" , "Listing_state" , "Listing_zipcode" ,
-                                              "Listing_type" , "listing_bed" , "listing_bath" ,
-                                              "Listing_Acrelot" , "Listing_house_size" ,
-                                              "Listing_full_address" , "Listing_street"] )
-        st.dataframe( clean_db1 )
 
 
 def delete_module():
