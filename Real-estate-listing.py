@@ -192,17 +192,14 @@ def update_delete_module(update_by_listing_id):
         if st.button( "Update Task" ) :
             cur.execute( 'update listing set price ="{}", Update_date=now() WHERE listing_id ="{}"'.format(Listing_newPrice ,update_by_listing_id ) )
             st.success( "Record is updated" )
-    
+    elif choice == "Delete Listing":
+        if st.session_state.loggedIn:
+            st.subheader("Delete Listing")        
+            delete_module()
+        else:
+            st.error("You need to able to delete")
 
-def delete_module():
-    resultset = run_query( " select listing.listing_id,listing_status.status_name,listing.Price,listing.acre_lot,listing.house_size,listing.full_address from listing inner join listing_status on listing_status.ID=listing.status_id" )
-    clean_db= pd.DataFrame( resultset,columns=["Listing_ID","Listing_Status","Listing_Price","Listing_Acrelot","Listing_house_size","Listing_full_address"] )
-    st.dataframe( clean_db)
-    listing_id=run_query("select listing_id,status_id,Price,acre_lot,house_size from listing")
-    unique_list=[i[0] for i in listing_id]
-    
-    delete_by_listing_id = st.selectbox( "Select Listing ID" , unique_list)
-    
+def delete_module():  
     if st.button( "Delete" ) :
         run_query('delete from listing where listing_id ="{}"'.format(delete_by_listing_id) )
         run_query('commit')
