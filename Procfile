@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run Real estate listing.py
+web: sh setup.sh && streamlit run myapps.py.py
