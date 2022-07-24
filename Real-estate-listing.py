@@ -205,6 +205,17 @@ def update_delete_module(update_by_listing_id):
             cur.execute('UPDATE listing SET status_id = (select id from listing_status where status_name = "{}"), Update_date=now() where listing_id ="{}"'.format(Listing_newstatus , update_by_listing_id ) )
             cur.execute('commit')
             st.success( "Record is updated" )
+            
+    elif option == 'Change Features' :
+        col1 , col2 = st.columns( 2 )
+        with col1 :
+            # Listing_newBeds = st.number_input( 'Beds' , task_Beds )
+            pro = clean_db.listing_bed.tolist()
+            avvl = run_query( 'select distinct bed from feature where bed != "{}"'.format(
+                task_Beds ) )
+            df = pd.DataFrame( avvl , columns=['Bedtype'] )
+            pro3 = df.Bedtype.tolist()
+            Listing_newBeds = st.selectbox( "Bed_type" , pro + pro3 )
 
 def delete_module(delete_by_listing_id):  
     if st.button( "Delete" ) :
