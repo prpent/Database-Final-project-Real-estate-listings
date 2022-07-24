@@ -198,6 +198,13 @@ def update_delete_module(update_by_listing_id):
             delete_module(update_by_listing_id)
         else:
             st.error("You need to able to delete")
+            
+    elif option == 'Change Status' :
+        Listing_newstatus = st.selectbox("Select Listing status" , listing_statuses, index = int(listing_statuses.index[listing_statuses['listing_status'] == task_status][0]) )
+        if st.button( "Update Task" ) :
+            cur.execute('UPDATE listing SET status_id = (select id from listing_status where status_name = "{}"), Update_date=now() where listing_id ="{}"'.format(Listing_newstatus , update_by_listing_id ) )
+            cur.execute('commit')
+            st.success( "Record is updated" )
 
 def delete_module(delete_by_listing_id):  
     if st.button( "Delete" ) :
@@ -318,6 +325,7 @@ def main():
             add_listing_form()
         else:
             st.error("You need to login to be able to add listings")
+    
         
         
     ## STATISTICAL VISUALIZATIONS
