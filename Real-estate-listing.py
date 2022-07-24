@@ -397,7 +397,8 @@ def main():
             st.subheader( "Update/Delete Listings" )
             listing_id = run_query( "select listing_id,status_id,Price,acre_lot,house_size from listing")
             unique_list = [i[0] for i in listing_id]
-            update_by_listing_id = st.selectbox( "Select Listing ID to update" , unique_list )
+            
+            update_by_listing_id = st.selectbox( "Select Listing ID to update" , ["select one",unique_list] )
             
             update_delete_module(update_by_listing_id)
         else:
