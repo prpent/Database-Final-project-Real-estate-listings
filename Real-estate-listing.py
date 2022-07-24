@@ -191,7 +191,6 @@ def update_delete_module(update_by_listing_id):
         Listing_newPrice = st.number_input( 'Enter the new Price' )
         if st.button( "Update Task" ) :
             cur.execute( 'update listing set price ="{}", Update_date=now() WHERE listing_id ="{}"'.format(Listing_newPrice ,update_by_listing_id ) )
-            cur.commit()
             st.success( "Record is updated" )
     
 
