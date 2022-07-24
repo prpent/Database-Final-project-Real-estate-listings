@@ -195,11 +195,11 @@ def update_delete_module(update_by_listing_id):
     elif option == "Delete Listing":
         if st.session_state.loggedIn:
             st.subheader("Delete Listing")        
-            delete_module()
+            delete_module(update_by_listing_id)
         else:
             st.error("You need to able to delete")
 
-def delete_module():  
+def delete_module(delete_by_listing_id):  
     if st.button( "Delete" ) :
         run_query('delete from listing where listing_id ="{}"'.format(delete_by_listing_id) )
         run_query('commit')
