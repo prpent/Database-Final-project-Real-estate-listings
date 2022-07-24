@@ -190,89 +190,10 @@ def update_delete_module(update_by_listing_id):
     if option == 'Change Price' :
         Listing_newPrice = st.number_input( 'Enter the new Price' )
         if st.button( "Update Task" ) :
-            run_query( 'update listing set price ="{}", Update_date=now() WHERE listing_id ="{}"'.format( Listing_newPrice ,update_by_listing_id ) )
-            db_conn.commit()
+            run_query( 'update listing set price ="{}", Update_date=now() WHERE listing_id ="{}"'.format(Listing_newPrice ,update_by_listing_id ) )
+            cur.commit()
             st.success( "Record is updated" )
-            
-    elif option == 'Change Status' :
-        Listing_newstatus = st.selectbox("Select Listing status" , listing_statuses, index = int(listing_statuses.index[listing_statuses['listing_status'] == task_status][0]) )
-        if st.button( "Update Task" ) :
-            run_query('UPDATE listing SET status_id = (select id from listing_status where status_name = "{}"), Update_date=now() where listing_id ="{}"'.format(Listing_newstatus , update_by_listing_id ) )
-            db_conn.commit()
-            st.success( "Record is updated" )
-            
-    elif option == 'Change Features' :
-        col1 , col2 = st.columns( 2 )
-        with col1 :
-            Listing_newBeds = st.selectbox( "Bed_type" , beds, index = int(beds.index[beds['bed'] == task_Beds][0]) )
-
-        with col2 :
-            Listing_newBaths = st.selectbox( "Bath_type" , baths, index = int(baths.index[baths['bath'] == task_Bath][0]) )
-
-        col3 , col4 = st.columns( 2 )
-        with col3 :
-            Listing_acrelot = st.number_input( 'Acre Lot' , task_acrelot )
-        with col4 :
-            Listing_newhousesize = st.number_input( 'House_Size' , task_housesize )
-
-        result2 = run_query(
-            'select * from feature where bed= "{}" and bath="{}"'.format(
-                Listing_newBeds , Listing_newBaths ) )
-        if result2 :
-            st.success( "Please proceed with updates" )
-            if st.button( "Update Task" ) :
-                run_query(
-                    'UPDATE listing SET feature_id = ( select id from feature where bed = "{}" and bath = "{}"), Update_date=now(),acre_lot = "{}",house_size="{}" where listing_id ="{}"'.format(
-                        Listing_newBeds , Listing_newBaths , Listing_acrelot , Listing_newhousesize ,
-                        update_by_listing_id ) )
-                db_conn.commit()
-                st.success( "Record is updated" )
-        else :
-            st.warning( "This combination doesn't exist, Please verify below in lookup" )
-            resultset3 = run_query( " select bed,bath from feature " )
-            with st.expander( "Look up for Bed and Bath combination" ) :
-                clean_db = pd.DataFrame( resultset3 ,
-                                         columns=["Listing_beds" , "Listing_baths"] )
-                st.dataframe( clean_db )
-            
-    elif option == 'Change Property_type' :
-        Listing_type = st.selectbox( "Listing Type*" , listing_types, index = int(listing_types.index[listing_types['listing_type'] == task_property][0]) )
-        if st.button( "Update Task" ) :
-            run_query('UPDATE listing SET property_type_id = ( select id from property_type where property_type_name = "{}") where listing_id ="{}"'.format(Listing_type , update_by_listing_id ))
-            db_conn.commit()
-            st.success( "Record is updated")
-
-    elif option == 'Change Address' :
-        Listing_Street = st.text_input( "Enter the Street" ,task_street,max_chars=(300) )
-        col1 , col2,col3= st.columns( 3 )
-        with col1 :
-            Listing_State = st.selectbox( "State" , states, index = int(states.index[states['state'] == task_state][0]))
-        with col2 :
-            Listing_uCity = st.selectbox( "City" , cities, index = int(cities.index[cities['city'] == task_city][0]) )
-        with col3:
-            Listing_uZipcode = st.selectbox( "Zipcode",zips,index = int(zips.index[zips['zip'] == task_zipcode][0]) )
-        
-        result2=run_query('select * from city where city= "{}" and state="{}" and zip_code="{}"'.format(Listing_uCity,Listing_State,Listing_uZipcode))
-        
-        if result2 :
-            st.success( "Please proceed with updates" )
-            if st.button( "Update Task" ) :
-                run_query(
-                    'update listing  set Update_Date=now(),  street = "{}",  city_id = (select id from city where city= "{}" and state = "{}" and zip_code ="{}") where listing_id = "{}"'.format(
-                        Listing_Street , Listing_uCity , Listing_State ,
-                        Listing_uZipcode , update_by_listing_id ) )
-                db_conn.commit()
-                run_query('update listing l inner join city c on l.city_id=c.id set l.full_address=(select concat(lower(l.street) ,",",lower(c.city),",",lower(c.state),",",c.zip_code)) where l.listing_id="{}"'.format(update_by_listing_id ) )
-                st.success( "Record is updated" )
-                db_conn.commit()
-        else:
-            st.warning( "Incorrect combination, please enter correct values" )
-            with st.expander( "Pease verify  below look up for city,state and zipcode" ) :
-                resultset3 = run_query( "select state,city,zip_code from city" )
-                clean_db = pd.DataFrame( resultset3 , columns=["State_name" , "City_name" , "Zip_code"] )
-                st.dataframe( clean_db )
-
-
+    
 
 def delete_module():
     resultset = run_query( " select listing.listing_id,listing_status.status_name,listing.Price,listing.acre_lot,listing.house_size,listing.full_address from listing inner join listing_status on listing_status.ID=listing.status_id" )
