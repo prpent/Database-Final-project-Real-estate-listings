@@ -230,6 +230,7 @@ def update_delete_module(update_by_listing_id):
                     'UPDATE listing SET feature_id = ( select id from feature where bed = "{}" and bath = "{}"), Update_date=now(),acre_lot = "{}",house_size="{}" where listing_id ="{}"'.format(
                         Listing_newBeds , Listing_newBaths , Listing_acrelot , Listing_newhousesize ,
                         update_by_listing_id ) )
+                cur.execute('commit')
                 st.success( "Record is updated" )
         else :
             st.warning( "This combination doesn't exist, Please verify below in lookup" )
@@ -238,11 +239,12 @@ def update_delete_module(update_by_listing_id):
                 clean_db = pd.DataFrame( resultset3 ,
                                          columns=["Listing_beds" , "Listing_baths"] )
                 st.dataframe( clean_db )
+                
     elif option == 'Change Property_type' :
         Listing_type = st.selectbox( "Listing Type*" , listing_types, index = int(listing_types.index[listing_types['listing_type'] == task_property][0]) )
         if st.button( "Update Task" ) :
-            run_query('UPDATE listing SET property_type_id = ( select id from property_type where property_type_name = "{}") where listing_id ="{}"'.format(Listing_type , update_by_listing_id ))
-            db_conn.commit()
+            cur.execute('UPDATE listing SET property_type_id = ( select id from property_type where property_type_name = "{}") where listing_id ="{}"'.format(Listing_type , update_by_listing_id ))
+            cur.execute('commit')
             st.success( "Record is updated")
 
     elif option == 'Change Address' :
@@ -260,16 +262,17 @@ def update_delete_module(update_by_listing_id):
         if result2 :
             st.success( "Please proceed with updates" )
             if st.button( "Update Task" ) :
-                run_query(
+                cur.execute(
                     'update listing  set Update_Date=now(),  street = "{}",  city_id = (select id from city where city= "{}" and state = "{}" and zip_code ="{}") where listing_id = "{}"'.format(
                         Listing_Street , Listing_uCity , Listing_State ,
                         Listing_uZipcode , update_by_listing_id ) )
-                db_conn.commit()
-                run_query(
+                cur.execute('commit')
+                cur.execute(
                     'update listing l inner join city c on l.city_id=c.id set l.full_address=(select concat(lower(l.street) ,",",lower(c.city),",",lower(c.state),",",c.zip_code)) where l.listing_id="{}"'.format(
                         update_by_listing_id ) )
+                cur.execute('commit')
                 st.success( "Record is updated" )
-                db_conn.commit()
+
         else:
             st.warning( "Incorrect combination, please enter correct values" )
             with st.expander( "Pease verify  below look up for city,state and zipcode" ) :
