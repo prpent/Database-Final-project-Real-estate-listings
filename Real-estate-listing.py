@@ -207,34 +207,37 @@ def update_delete_module(update_by_listing_id):
             st.success( "Record is updated" )
             
     elif option == 'Change Features' :
-          col1 , col2 = st.columns( 2 )
-          with col1 :
-                Listing_newBeds = st.selectbox( "Bed_type" , beds, index = int(beds.index[beds['bed'] == task_Beds][0]) )
+        col1 , col2 = st.columns( 2 )
+        with col1 :
+            Listing_newBeds = st.selectbox( "Bed_type" , beds, index = int(beds.index[beds['bed'] == task_Beds][0]) )
 
-          with col2 :
-                Listing_newBaths = st.selectbox( "Bath_type" , baths, index = int(baths.index[baths['bath'] == task_Bath][0]) )
+        with col2 :
+            Listing_newBaths = st.selectbox( "Bath_type" , baths, index = int(baths.index[baths['bath'] == task_Bath][0]) )
 
-            col3 , col4 = st.columns( 2 )
-          with col3 :
-                Listing_acrelot = st.number_input( 'Acre Lot' , task_acrelot )
-          with col4 :
-                Listing_newhousesize = st.number_input( 'House_Size' , task_housesize )
+        col3 , col4 = st.columns( 2 )
+        with col3 :
+            Listing_acrelot = st.number_input( 'Acre Lot' , task_acrelot )
+        with col4 :
+            Listing_newhousesize = st.number_input( 'House_Size' , task_housesize )
 
-          result2 = ('select * from feature where bed= "{}" and bath="{}"'.format(Listing_newBeds , Listing_newBaths ) )
-          if result2 :
-              st.success( "Please proceed with updates" )
-              if st.button( "Update Task" ) :
-                    cur.execute('UPDATE listing SET feature_id = ( select id from feature where bed = "{}" and bath = "{}"), Update_date=now(),acre_lot = "{}",house_size="{}" where listing_id ="{}"'.format(Listing_newBeds , Listing_newBaths,Listing_acrelot , Listing_newhousesize ,update_by_listing_id ) )
-                    cur.execute('commit')
-                    st.success( "Record is updated" )
-              else :
-                st.warning( "This combination doesn't exist, Please verify below in lookup" )
-                resultset3 = run_query( " select bed,bath from feature " )
-                with st.expander( "Look up for Bed and Bath combination" ) :
-                    clean_db = pd.DataFrame( resultset3 ,
-                                             columns=["Listing_beds" , "Listing_baths"] )
-                    st.dataframe( clean_db )
-            
+        result2 = run_query(
+            'select * from feature where bed= "{}" and bath="{}"'.format(
+                Listing_newBeds , Listing_newBaths ) )
+        if result2 :
+            st.success( "Please proceed with updates" )
+            if st.button( "Update Task" ) :
+                cur.execute(
+                    'UPDATE listing SET feature_id = ( select id from feature where bed = "{}" and bath = "{}"), Update_date=now(),acre_lot = "{}",house_size="{}" where listing_id ="{}"'.format(
+                        Listing_newBeds , Listing_newBaths , Listing_acrelot , Listing_newhousesize ,
+                        update_by_listing_id ) )
+                st.success( "Record is updated" )
+        else :
+            st.warning( "This combination doesn't exist, Please verify below in lookup" )
+            resultset3 = run_query( " select bed,bath from feature " )
+            with st.expander( "Look up for Bed and Bath combination" ) :
+                clean_db = pd.DataFrame( resultset3 ,
+                                         columns=["Listing_beds" , "Listing_baths"] )
+                st.dataframe( clean_db )
 
 def delete_module(delete_by_listing_id):  
     if st.button( "Delete" ) :
