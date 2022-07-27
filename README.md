@@ -14,4 +14,6 @@ The architecture of the web page is as follows:
 
 
 Demo URL: https://youtu.be/IUc1XJKBjuI
+
+
 Web app link: https://prpent-database-final-project-real-e-real-estate-listing-dhaxum.streamlitapp.com/
