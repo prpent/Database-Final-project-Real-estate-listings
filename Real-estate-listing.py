@@ -186,7 +186,7 @@ def update_delete_module(update_by_listing_id):
         task_property = resultset[0][6]
         clean_db = pd.DataFrame( resultset ,columns=["Listing_ID" , "Listing_Status" , "Listing_Price" , "Listing_city","Listing_state","Listing_zipcode","Listing_type","listing_bed","listing_bath","Listing_Acrelot" ,"Listing_house_size" , "Listing_full_address" , "Listing_street"] )
         st.dataframe( clean_db )
-        listing_bed.astype(np.float)
+        df.listing_bed.astype(np.float)
         listing_id = run_query( "select listing_id from listing" )
     option = st.selectbox( "Please Select form" , ('-- Choose One -','Delete Listing','Change Address' , 'Change Status' , 'Change Features' , 'Change Property_type','Change Price') )
     if option == 'Change Price' :
