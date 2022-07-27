@@ -5,6 +5,7 @@ import pandas as pd
 from PIL import Image
 import mysql.connector
 import matplotlib.pyplot as plt
+import numpy as np
 
 db_conn = mysql.connector.connect(**st.secrets["mysql"])
 cur = db_conn.cursor()
