@@ -188,7 +188,7 @@ def update_delete_module(update_by_listing_id):
         clean_db = pd.DataFrame( resultset ,columns=["Listing_ID" , "Listing_Status" , "Listing_Price" , "Listing_city","Listing_state","Listing_zipcode","Listing_type","listing_bed","listing_bath","Listing_Acrelot" ,"Listing_house_size" , "Listing_full_address" , "Listing_street"] )
         clean_db.listing_bath= clean_db.listing_bath.astype(np.float)
         # round to two decimal places in python pandas
-        df.applymap(lambda x: str(int(x)) if abs(x - int(x)) < 1e-6 else str(round(x,1)))
+        clean_db.applymap(lambda x: str(int(x)) if abs(x - int(x)) < 1e-6 else str(round(x,1)))
         st.dataframe( clean_db )
         listing_id = run_query( "select listing_id from listing" )
     option = st.selectbox( "Please Select form" , ('-- Choose One -','Delete Listing','Change Address' , 'Change Status' , 'Change Features' , 'Change Property_type','Change Price') )
