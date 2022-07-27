@@ -210,6 +210,7 @@ def update_delete_module(update_by_listing_id):
     elif option == 'Change Features' :
         col1 , col2 = st.columns( 2 )
         with col1 :
+            listing_bed.astype(np.float)
             Listing_newBeds = st.selectbox( "Bed_type" , beds, index = int(beds.index[beds['bed'] == task_Beds][0]) )
 
         with col2 :
