@@ -11,3 +11,7 @@ The architecture of the web page is as follows:
 5)	Admin can modify/delete the listing from the Update/Delete listing page
 6)	Admin can view statistics through visualizations on the statistical plots page.
 7)	Users can view all the listings as per the requirement using different filters on the search listings page.
+
+
+Demo URL: https://youtu.be/IUc1XJKBjuI
+Web app link: https://prpent-database-final-project-real-e-real-estate-listing-dhaxum.streamlitapp.com/
